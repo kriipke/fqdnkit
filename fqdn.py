@@ -13,21 +13,6 @@ def gen_nchar_names(n,charset='abcdefjhijklmnopqrstubwxyz1234567890'):
             name_list.append("{}{}".format(i,j))
     return name_list
 
-def filter_tlds(re_filter):
-    tld_list_url = 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
-    tlds_raw_response = requests.request("GET", tld_list_url).text
-    tlds = tlds_raw_response.lower().splitlines()
-    # matches lines starting with # as well as empty lines
-    #re_tlds = r'^(?:#|$)'
-    for tld in tlds:
-        #print(tld)
-        m = re.match(r'^(?:#|$)',tld)
-        #m = re.match(r'^(?!:#|$)[a-zA-Z0-9-]+',tld)
-        if m:
-            tlds.remove(tld)
-    print(tlds)
-    
-
 def get_tlds(source='ianna'):
     if source == 'ianna':
         tld_list_url = 'https://data.iana.org/TLD/tlds-alpha-by-domain.txt'
@@ -55,6 +40,12 @@ def filter_tlds(tlds, re_include_list=[], re_exclude_list=[]):
                     if re.search(i, d) ]
     return tlds
 
+def fqdn_permutations(pqdns,fqdns):
+    permutations = []
+    for i in charset:
+        for j in charset:
+            permutations.append("{}.{}".format(i,j))
+    return permutations
 
 def check_fqdns(fqdns):
     client = Client(wxa_api_key)
@@ -63,27 +54,11 @@ def check_fqdns(fqdns):
         availability_results[fqdn] = client.data(fqdn).is_available()
     return availability_results
 
-#filter_tlds('^[a-zA-Z0-9]{2}')
-#print('(?:nl|nlcr)([a-zA-Z0-9]{leng})(?:nl|nlcr|$)'.format(nl = '\n',nlcr = '\n\r',leng=2))
-#filter_tlds(r'(?:\n|\n\r)([a-zA-Z0-9]{2})(?:\n|\n\r|$)')
-#domains = ['xtal.is']
-
-#result = print(availability_results)
-
-# Get raw API response
-#raw_result = client.raw_data('whoisxmlapi.com')
-
-#print(get_tlds())
-#print(filter_tlds(get_tlds(),re_include_list = [r'^$',r';^#',r'^[xXaA]']))
-
 def test_function():
 	tlds = filter_tlds(get_tlds(),re_include_list = [r'^$',r';^#',r'^[xXaA]'])
 	assert tlds[0] == 'aaa'
 
-
 def main():
-    #args = docopt.docopt(__doc__)
-    #snek_type = args['--type'] or 'normal'
     print(get_tlds())
     
 if __name__ == '__main__':

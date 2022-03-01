@@ -1,4 +1,5 @@
 from setuptools import setup
+import os
 
 setup(
     name='fqdn',
@@ -8,4 +9,5 @@ setup(
         ],
     },
     py_modules=['fqdn'],
+    scripts=[os.path.join('bin','genfqdn')],
 )

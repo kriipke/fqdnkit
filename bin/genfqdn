@@ -1,0 +1,6 @@
+#! /usr/bin/python3-64
+
+from .. import fqdn
+
+tlds = fqdn.get_tlds()
+print(tlds)
